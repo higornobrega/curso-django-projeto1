@@ -292,7 +292,11 @@ h6 {
 }
 
 /* Messages */
-/* Messages */
+.messages-container {
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 1rem;
+}
 .message {
   padding: 1rem;
   border-radius: 4px;
