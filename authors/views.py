@@ -5,7 +5,10 @@ from .forms import RegisterForm
 
 # Create your views here.
 def register_view(request):
-    form = RegisterForm(request.POST or None)
+    if request.POST:
+        form = RegisterForm(request.POST)
+    else:
+        form = RegisterForm()
     context = {
         'form':form,
     }
