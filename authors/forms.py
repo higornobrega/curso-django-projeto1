@@ -1,5 +1,8 @@
+from typing import Any
+
 from django import forms
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 
 
 def add_attr(field, attr_name, attr_new_val):
@@ -7,7 +10,7 @@ def add_attr(field, attr_name, attr_new_val):
     field.widget.attrs[attr_name] = f'{existing_attr} {attr_new_val}'.strip()
 
 def add_placeholder(field, placeholder_val):
-    field.widget.attrs['placeholder'] = placeholder_val
+    add_attr(field, 'placeholder', placeholder_val)
 class RegisterForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -15,6 +18,7 @@ class RegisterForm(forms.ModelForm):
         add_placeholder(self.fields['username'], 'Your username')
         add_placeholder(self.fields['first_name'], 'Ex.: Higor')
         add_placeholder(self.fields['last_name'], 'Ex.: Nóbrega')
+        add_attr(self.fields['username'], 'css', 'a-css-class')
     
     
     # Sobrescrevendo o campos
@@ -89,3 +93,29 @@ class RegisterForm(forms.ModelForm):
                     'placeholder': 'Type your password here'
             })
         }
+        
+    # Validando Campos específicos
+    def clean_password(self):
+        data = self.cleaned_data.get('password')
+        
+        if 'atenção' in data:
+            raise ValidationError(
+                'Não digite "atenção" no campo password',
+                code='invalid',
+                params={'value':'atenção'}
+            )
+        
+        return data
+    
+    # Validando Campos específicos
+    def clean_first_name(self):
+        data = self.cleaned_data.get('first_name')
+        
+        if 'John Doe' in data:
+            raise ValidationError(
+                'Não digite "John Doe" no campo first_name',
+                code='invalid',
+                params={'value':'John Doe'}
+            )
+        
+        return data
