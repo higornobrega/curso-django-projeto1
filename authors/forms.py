@@ -119,3 +119,16 @@ class RegisterForm(forms.ModelForm):
             )
         
         return data
+    
+    def clean(self) -> dict[str, Any]:
+        cleaned_data = super().clean()
+        
+        password = cleaned_data.get('password')
+        password2 = cleaned_data.get('password2')
+        
+        if password != password2:
+            raise ValidationError({
+                    'password':'Password and Password2 most be equals',
+                    'password2':'Password and Password2 most be equals'
+                })
+        
