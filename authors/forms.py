@@ -29,18 +29,15 @@ class RegisterForm(forms.ModelForm):
         add_attr(self.fields['email'], 'placeholder', 'Your Email')
         add_placeholder(self.fields['username'], 'Your username')
         add_placeholder(self.fields['first_name'], 'Ex.: Higor')
+        add_placeholder(self.fields['password'], 'Type your password')
+        add_placeholder(self.fields['password2'], 'Repeat your password')
         add_placeholder(self.fields['last_name'], 'Ex.: Nóbrega')
-        add_attr(self.fields['username'], 'css', 'a-css-class')
     
     
     # Sobrescrevendo o campos
     password = forms.CharField(
         required=True,
-        widget=forms.PasswordInput(
-            attrs={
-                'placeholder':'Your passwor'
-            }
-        ),
+        widget=forms.PasswordInput(),
         error_messages={
             'required':'Password must not be empty'
         },
@@ -55,9 +52,8 @@ class RegisterForm(forms.ModelForm):
     # Criando campo extra 
     password2 = forms.CharField(
         required=True, 
-        widget=forms.PasswordInput(attrs={
-            'placeholder':'Repeat your password'                            
-        })
+        widget= forms.PasswordInput()
+
     )
     
     
@@ -99,12 +95,9 @@ class RegisterForm(forms.ModelForm):
         # Tipo e atributos para campo
         widgets = {
             'first_name':forms.TextInput(attrs={
-                'placeholder':'Type your username here',
                 'class': 'input text-input'
             }),
-            'password': forms.PasswordInput(attrs={
-                    'placeholder': 'Type your password here'
-            })
+        
         }
         
     # Validando Campos específicos
