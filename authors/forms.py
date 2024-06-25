@@ -46,13 +46,15 @@ class RegisterForm(forms.ModelForm):
             'one lowercase letter and one number. The lenght should be '
             'at least 8 characters.'
         ),
-        validators=[strong_password]
-    )
+        validators=[strong_password],
+        label='password',
+        )
     
     # Criando campo extra 
     password2 = forms.CharField(
         required=True, 
-        widget= forms.PasswordInput()
+        widget= forms.PasswordInput(),
+        label='password2',
 
     )
     
@@ -77,7 +79,6 @@ class RegisterForm(forms.ModelForm):
             'last_name': 'last_name',
             'username': 'username',
             'email': 'email',
-            'password': 'password',
         }
         
         # Mensagem de ajuda abaixo do campo
@@ -101,30 +102,30 @@ class RegisterForm(forms.ModelForm):
         }
         
     # Validando Campos específicos
-    def clean_password(self):
-        data = self.cleaned_data.get('password')
+    # def clean_password(self):
+    #     data = self.cleaned_data.get('password')
         
-        if 'atenção' in data:
-            raise ValidationError(
-                'Não digite "atenção" no campo password',
-                code='invalid',
-                params={'value':'atenção'}
-            )
+    #     if 'atenção' in data:
+    #         raise ValidationError(
+    #             'Não digite "atenção" no campo password',
+    #             code='invalid',
+    #             params={'value':'atenção'}
+    #         )
         
-        return data
+    #     return data
     
     # Validando Campos específicos
-    def clean_first_name(self):
-        data = self.cleaned_data.get('first_name')
+    # def clean_first_name(self):
+    #     data = self.cleaned_data.get('first_name')
         
-        if 'John Doe' in data:
-            raise ValidationError(
-                'Não digite "John Doe" no campo first_name',
-                code='invalid',
-                params={'value':'John Doe'}
-            )
+    #     if 'John Doe' in data:
+    #         raise ValidationError(
+    #             'Não digite "John Doe" no campo first_name',
+    #             code='invalid',
+    #             params={'value':'John Doe'}
+    #         )
         
-        return data
+    #     return data
     
     def clean(self) -> dict[str, Any]:
         cleaned_data = super().clean()
