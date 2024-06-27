@@ -35,8 +35,18 @@ class RegisterForm(forms.ModelForm):
     
     
     # Sobrescrevendo o campos
+    
+    username = forms.CharField(
+        label='username',
+        help_text=(
+            'Username must have letters, numbers or one of @.+-_. '
+            'The length should be between 4 and 150 characters.'
+        ),
+        min_length=4, max_length=150,
+    )
+    
     password = forms.CharField(
-        required=True,
+        # required=True,
         widget=forms.PasswordInput(),
         error_messages={
             'required':'Password must not be empty'
@@ -52,13 +62,31 @@ class RegisterForm(forms.ModelForm):
     
     # Criando campo extra 
     password2 = forms.CharField(
-        required=True, 
+        # required=True, 
+        error_messages={
+            'required':'Please, repeat your password'
+        },
         widget= forms.PasswordInput(),
         label='password2',
 
     )
+    first_name = forms.CharField(
+        error_messages={'required': 'Write your first name'},
+        # required=True,
+        label='First Name'
+    )
     
-    
+    last_name = forms.CharField(
+        error_messages={'required': 'Write your last name'},
+        # required=True,
+        label='last_name'
+    )
+    email = forms.EmailField(
+        error_messages={'required': 'Write your e-mail'},
+        # required=True,
+        label='email',
+        help_text = 'The e-mail must be valid',
+    )
     class Meta:
         model = User
         # Campos a serem exibidos
@@ -74,21 +102,18 @@ class RegisterForm(forms.ModelForm):
         # exclude = ['first_name'] 
         
         # Titulo que mostra a cima do campo 
-        labels = {
-            'first_name': 'first_name',
-            'last_name': 'last_name',
-            'username': 'username',
-            'email': 'email',
-        }
+        # labels = {
+        #     'username': 'username',
+        # }
         
         # Mensagem de ajuda abaixo do campo
-        help_texts = {
-            'email':'The e-mail must be valid',
-        }
-        
+             
         # Mensagem de erro
         error_messages = {
             'username':{
+                'required': 'This field must not be empty', # Código do erro : mensagem do erro
+            },
+            'first_name':{
                 'required': 'This field must not be empty', # Código do erro : mensagem do erro
             }
         }
