@@ -96,3 +96,37 @@ class AuthorsRegisterFormIntegrationTest(DjangoTestCase):
         response = self.client.post(url, data=self.format_data, follow=True)
         msg = f'Certifique-se de que o valor tenha no máximo 150 caracteres (ele possui {len(self.format_data["username"])}).'
         self.assertIn(msg, response.context['form'].errors.get('username'))
+        
+    def test_password_field_have_lower_upper_case_letters_and_numbers(self):
+        self.format_data['password'] = 'abcdefgji'
+        url = reverse('authors:create')
+        response = self.client.post(url, data=self.format_data, follow=True)
+        msg = f'Password must have at least one uppercase letter, one lowercase letter and one number. The lenght should be at least 8 characters.'
+        self.assertIn(msg, response.context['form'].errors.get('password'))
+        
+    def test_password_and_password_confirmation_are_equal(self):
+        self.format_data['password'] = 'abc123@A'
+        self.format_data['password2'] = 'abc123@'
+        url = reverse('authors:create')
+        response = self.client.post(url, data=self.format_data, follow=True)
+        msg = f'Password and Password2 most be equals'
+        self.assertIn(msg, response.context['form'].errors.get('password'))
+        
+        
+    def test_send_get_request_to_registration_create_view_returns_404(self):
+        url = reverse('authors:create')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 404)
+        
+        
+    def test_send_post_correct(self):
+        url = reverse('authors:create')
+        response = self.client.post(url, data=self.format_data, follow=True)
+        self.assertEqual(response.status_code, 200)
+        
+    def test_email_alrealy_exist(self):
+        url = reverse('authors:create')
+        self.client.post(url, data=self.format_data, follow=True)
+        response = self.client.post(url, data=self.format_data, follow=True)
+        msg = f'Email already exists'
+        self.assertIn(msg, response.context['form'].errors.get('email'))
